@@ -1,22 +1,59 @@
 (ns analemma.core
-  (:require [reagent.core :as reagent :refer [atom]]))
+  (:require [reagent.core :as reagent :refer [atom]]
+            [clojure.string :as string]))
 
-(enable-console-print!)
+(defonce state (atom {:text "Hello world!"}))
+(def size
+  "Tamanho da tela no browser"
+  300)
+(def view-box
+  "Lista com: x-minimo, y-minimo, range do x, range do y"
+  [-50 -50 100 100])
+(def raio
+  "Tamanho padrão da bola"
+  5)
 
-(println "This text is printed from src/analemma/core.cljs. Go ahead and edit it and see reloading in action.")
+(def cor
+  "Cor padrão da bola"
+  :green)
 
-;; define your app data so that it doesn't get over-written on reload
+(defn ponto-simetrico
+  [i]
+  {:x i :y (- i)})
 
-(defonce app-state (atom {:text "Hello world!"}))
+(defn gerar-estado
+  "Função que retorna o estado da aplicação. Aqui que a mágica ocorre
+  "
+  []
+  {:pontos (for [i (range 5)]
+             (let [x (* 10 i)]
+               (ponto-simetrico x)))})
 
-(defn hello-world []
-  [:h1 (:text @app-state)])
+(defn hello-world
+  "Função que renderiza o estado."
+  []
+  (let [estado @state]
+    [:div [:svg {:width    size
+                 :view-box (string/join " " view-box)
+                 :height   size}
+           (for [ponto (get estado :pontos)]
+             [:circle {:cx   (get ponto :x)
+                       :cy   (get ponto :y)
+                       :r    (get ponto :r raio)
+                       :fill (get ponto :fill cor)}])]
+     [:br]
+     [:code (str estado)]
+     ]))
+
+
+
 
 (reagent/render-component [hello-world]
-                          (. js/document (getElementById "app")))
+                          (do
+                            (reset! state (gerar-estado))
+                            (. js/document (getElementById "app"))))
 
 (defn on-js-reload []
-  ;; optionally touch your app-state to force rerendering depending on
-  ;; your application
-  ;; (swap! app-state update-in [:__figwheel_counter] inc)
-)
+  (reset! state (gerar-estado))
+  )
+

@@ -1,3 +1,6 @@
 .idea/
 analemma.iml
 target/
+resources/public/js/
+figwheel_server.log
+

@@ -3,16 +3,16 @@
   :url "https://souenzzo.github.com"
   :license {:name "GPLv3"
             :url  "https://www.gnu.org/licenses/gpl-3.0.en.html"}
-  :min-lein-version "2.7.1"
-  :dependencies [[org.clojure/clojure "1.9.0-alpha16"]
-                 [org.clojure/clojurescript "1.9.521"]
-                 [reagent "0.6.1"]]
-  :plugins [[lein-figwheel "0.5.10"]
-            [lein-cljsbuild "1.1.5"]]
+  :min-lein-version "2.8.1"
+  :dependencies [[org.clojure/clojure "1.10.0-beta1"]
+                 [org.clojure/clojurescript "1.10.339"]
+                 [reagent/reagent "0.8.1"]]
+  :plugins [[lein-figwheel/lein-figwheel "0.5.10"]
+            [lein-cljsbuild/lein-cljsbuild "1.1.7"]]
   :source-paths ["src"]
   :cljsbuild {:builds [{:id           "dev"
                         :source-paths ["src"]
-                        :figwheel     {:on-jsload "analemma.core/on-js-reload"
+                        :figwheel     {:on-jsload "analemma.core/on-jsload"
                                        :open-urls ["http://localhost:3449/index.html"]}
                         :compiler     {:main                 analemma.core
                                        :asset-path           "js/compiled/out"
@@ -26,9 +26,9 @@
                                        :main          analemma.core
                                        :optimizations :advanced
                                        :pretty-print  false}}]}
-  :profiles {:dev {:dependencies  [[binaryage/devtools "0.9.2"]
-                                   [figwheel-sidecar "0.5.10"]
-                                   [com.cemerick/piggieback "0.2.1"]]
+  :profiles {:dev {:dependencies  [[binaryage/devtools "0.9.10"]
+                                   [figwheel-sidecar/figwheel-sidecar "0.5.16"]
+                                   [com.cemerick/piggieback "0.2.2"]]
                    :source-paths  ["src"]
                    :repl-options  {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
                    :clean-targets ^{:protect false} ["resources/public/js/compiled"

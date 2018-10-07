@@ -1,6 +1,7 @@
 .idea/
-analemma.iml
+*.iml
 target/
+out/
 resources/public/js/
 figwheel_server.log
-
+.nrepl-port

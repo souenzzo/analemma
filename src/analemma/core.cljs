@@ -1,17 +1,18 @@
 (ns analemma.core
-  (:require [reagent.core :as reagent :refer [atom]]
+  (:require [reagent.core :as r]
             [clojure.string :as string]))
 
-(defonce state (atom {:text "Hello world!"}))
 (def size
   "Tamanho da tela no browser"
   300)
+
 (def view-box
   "Lista com: x-minimo, y-minimo, range do x, range do y"
-  [-50 -50 100 100])
+  [-10 -490 490 490])
+
 (def raio
   "Tamanho padrão da bola"
-  5)
+  2)
 
 (def cor
   "Cor padrão da bola"
@@ -22,12 +23,13 @@
   {:x i :y (- i)})
 
 (defn gerar-estado
-  "Função que retorna o estado da aplicação. Aqui que a mágica ocorre
-  "
+  "Função que retorna o estado da aplicação. Aqui que a mágica ocorre"
   []
-  {:pontos (for [i (range 5)]
+  {:pontos (for [i (range 50)]
              (let [x (* 10 i)]
                (ponto-simetrico x)))})
+
+(defonce state (r/atom (gerar-estado)))
 
 (defn hello-world
   "Função que renderiza o estado."
@@ -42,18 +44,10 @@
                        :r    (get ponto :r raio)
                        :fill (get ponto :fill cor)}])]
      [:br]
-     [:code (str estado)]
-     ]))
+     #_[:code (str estado)]]))
 
+(r/render-component [hello-world] (.getElementById js/document "app"))
 
-
-
-(reagent/render-component [hello-world]
-                          (do
-                            (reset! state (gerar-estado))
-                            (. js/document (getElementById "app"))))
-
-(defn on-js-reload []
-  (reset! state (gerar-estado))
-  )
-
+(defn on-jsload
+  []
+  (reset! state (gerar-estado)))
